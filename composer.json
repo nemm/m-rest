@@ -6,7 +6,8 @@
         "nyholm/psr7": "^1.5"
     },
     "require-dev": {
-        "nyholm/psr7": "^1.5"
+        "nyholm/psr7": "^1.5",
+        "phpunit/phpunit": "^8"
     },
     "license": "MIT",
     "autoload": {
@@ -20,6 +21,6 @@
             "email": "nemo@zmap.pl"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "version": "1.0.0"
 }
