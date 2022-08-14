@@ -20,5 +20,6 @@
             "email": "nemo@zmap.pl"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "version": "1.0.0"
 }
