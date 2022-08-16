@@ -17,3 +17,8 @@ $ composer require nemm/m-rest
 ```bash
 ./vendor/bin/phpunit --verbose tests/TestClient.php
 ```
+
+## How to use
+```bash
+example.php
+```
