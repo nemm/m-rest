@@ -50,45 +50,7 @@
                     (new Client( 'https://gorest.co.in/' ))
                         ->setAuthentication( AuthenticationFactory::createJWTAuth( $token ));
 
-            $responseData = $client->post("/public/v2/users",null,["name" => "EineKleine Świnka", "gender" => "female", "email" => "swinka@einekleine.pl", "status" => "active"]);
-            
-            # Unprocessable Entity, entry already added earlier
-            $this->assertSame($responseData->getCode(), 422);
-        }
-        
-        
-        public function testJWTAuthPUT(){
-            # simple PUT with JWT Auth with pregenerated token
-            # change świnka's gender
-            
-            $token = "13121f7fa398b0333eb7223212b33040ce160d5c5f806235d1cd3d3e47966d1a";
-            $client = 
-                    (new Client( 'https://gorest.co.in/' ))
-                        ->setAuthentication( AuthenticationFactory::createJWTAuth( $token ));
-
-            $responseData = $client->put("/public/v2/users/4245",null,["name" => "EineKleine Świnka", "gender" => "male", "email" => "swinka@einekleine.pl", "status" => "active"]);
-            
-            # Unprocessable Entity, entry already added earlier
+            $responseData = $client->get("/public/v2/users",null);
             $this->assertSame($responseData->getCode(), 200);
-            $this->assertArrayHasKey('gender', $responseData->getData() );
-            $this->assertSame($responseData->getData()['gender'], 'male');
-        }
-        
-        
-        public function testJWTAuthPATCH(){
-            # simple PATCH with JWT Auth with pregenerated token
-            # change świnka's gender again
-            
-            $token = "13121f7fa398b0333eb7223212b33040ce160d5c5f806235d1cd3d3e47966d1a";
-            $client = 
-                    (new Client( 'https://gorest.co.in/' ))
-                        ->setAuthentication( AuthenticationFactory::createJWTAuth( $token ));
-
-            $responseData = $client->patch("/public/v2/users/4245",null,["gender" => "female"]);
-            
-            # Unprocessable Entity, entry already added earlier
-            $this->assertSame($responseData->getCode(), 200);
-            $this->assertArrayHasKey('gender', $responseData->getData() );
-            $this->assertSame($responseData->getData()['gender'], 'female');
         }
     }
