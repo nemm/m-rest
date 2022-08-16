@@ -69,10 +69,17 @@
             
             # make the call
             $response = $this->doTheRequest($request);
+            if( is_null( $response ) ){
+                return new ResponseData( 0, null);
+            }
             
             # retrieve data
             $response->getBody()->rewind();
-            $contents = json_decode( trim($response->getBody()->getContents() ), true);
+            $bodyContents = trim($response->getBody()->getContents());
+            $contents = json_decode( $bodyContents, true);
+            if( is_null($contents) ){
+                $contents = [ 'unparseable' => $bodyContents];
+            }
             
             # construct ResponseData object and return
             $responseData = new ResponseData( $response->getStatusCode(), $contents);
@@ -98,6 +105,7 @@
             # some standard options
             $options[CURLOPT_URL] = (string)$request->getUri();
             $options[CURLOPT_RETURNTRANSFER] = true;
+            //$options[CURLOPT_TIMEOUT_MS] = 1; - test timeout
             
             # headers
             $headers = [];
@@ -147,8 +155,9 @@
         
         /**
          * this is where curl is making a shot
+         * @throws Exception if connection could not been made
          */
-        private function doTheRequest( RequestInterface $request ): ResponseInterface{
+        private function doTheRequest( RequestInterface $request ): ?ResponseInterface{
             # construct factory
             $psr17Factory = new Psr17Factory();
             
@@ -190,8 +199,12 @@
             curl_close($curl);
             
             # fill ResponseMessage
+            if( $info['http_code'] === 0 ){
+                throw new \Exception( curl_error($curl), curl_errno($curl) );
+            }
+            
             $response = $response
-                ->withStatus($info['http_code'])
+                ->withStatus($info['http_code'] )
                 ->withBody( Stream::create( $body ) );
             
             return $response;
